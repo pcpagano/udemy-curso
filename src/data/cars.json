@@ -1,0 +1,17 @@
+[
+    {
+        "id": "1111",
+        "model": "Fiesta",
+        "brand": "Ford"
+    },
+    {
+        "id": "2222",
+        "model": "208",
+        "brand": "Peugeot"
+    },
+    {
+        "id": "3333",
+        "model": "Argo",
+        "brand": "Fiat"
+    }
+]

@@ -1,6 +1,7 @@
 import React,{Component} from 'react';
 import logo from './logo.svg';
 import './App.css';
+import cars from './data/cars.json';
 
 function App() {
   return (
@@ -17,47 +18,82 @@ function App() {
 class CodeExamples extends Component {
   constructor() {
     super()
-    this.state = {toggleExamples: true}
+    this.state = {toggleExamplesSeccion14: true,
+                  toggleExamplesSeccionList: true,
+                  mouseX: 0, mouseY: 0}
   }
 
   render() {
     return (
       <div>
-        <button onClick={() => this.toggleExamples()}>Toggle Examples</button>
-        {this.getExamples()}
+        <button onClick={this.toggleExamples14}>Toggle Seccion 1 a 4</button>
+        {this.getExamplesSeccion14()}
+        <div>
+        <button onClick={() => this.toggleExamplesList()}>Toggle list section</button>
+        {this.getExamplesListSeccion()}
+        </div>
+        <div
+          onMouseMove={this.handleMouseMove}
+          style={{border: '1px solid #000', marginTop: 20, padding: 10 }}>
+            <p>Mouse Position: {this.state.mouseX}, {this.state.mouseY}</p>
+        </div>
       </div>
     )
   }
 
-  getExamples() {
-    if (this.state.toggleExamples) {
+  getExamplesSeccion14() {
       return (
         <span>
-          <Hello 
-            name="Cesar" 
-            toggle
-            arreglo={[2,4,8]} 
-            objectWithInfo={{key1:"This is ", key2:"a text"}}
-            formula={(p) => p * 2}
-            someState={<EjemploState/>}
-          />
+            {this.state.toggleExamplesSeccion14 ? 
+                <span>
+                <Hello 
+                  name="Cesar" 
+                  toggle
+                  arreglo={[2,4,8]} 
+                  objectWithInfo={{key1:"This is ", key2:"a text"}}
+                  formula={(p) => p * 2}
+                  someState={<EjemploState/>}
+                />
 
-          <p>Esto sería un contador: {<Contador contadorInitial={7} />}</p>
+                <p>Esto sería un contador: {<Contador contadorInitial={7} active={this.state.toggleExamplesSeccion14}/>}</p>
 
-          <Logo/>
+                <Logo/>
 
-          <Paragraph/>
+                </span>
+          : <span /> }
         </span>
       )
-    } else return <span />
   }
 
-  toggleExamples() {
-    console.log("toggle")
-    this.setState({toggleExamples: !this.state.toggleExamples})
+  getExamplesListSeccion() {
+    if (this.state.toggleExamplesSeccionList) {
+      return (
+          <span>
+            <Paragraph/>
+            <EjemploLista />
+          </span>
+        )
+      }
+  }
+
+// This is the best and tidy way to link the caller component with the event handler
+  toggleExamples14 = () => {
+    console.log("toggle 14")
+    this.setState({toggleExamplesSeccion14: !this.state.toggleExamplesSeccion14})
+  }
+  
+  toggleExamplesList() {
+    console.log("toggle 5")
+    this.setState({toggleExamplesSeccionList: !this.state.toggleExamplesSeccionList})
+  }
+
+  handleMouseMove = (e) => {
+    const {clientX, clientY} = e
+    this.setState({mouseX: clientX, mouseY: clientY})
   }
 }
 
+// Seccion 1 a 4
 class Hello extends Component {
   
   // constructor() {
@@ -103,14 +139,19 @@ class EjemploState extends Component {
 class Contador extends Component {
   constructor(props) {
     super(props)
-    this.state = { contador: this.props.contadorInitial}
-    setInterval(() => {
-      this.setState({ contador: this.state.contador + 1 })
-    }, 1000)
+    const myInterval =
+      setInterval(() => {
+        this.setState({ contador: this.state.contador + 1 })
+      }, 1000)
+    this.state = { contador: this.props.contadorInitial , myInterval: myInterval}
   }
   
   render() {
     return <span>{this.state.contador}</span>
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.state.myInterval)
   }
 }
 
@@ -121,7 +162,28 @@ Contador.defaultProps = {
 const Logo = (props) => <img src={logo} className="App-logo" alt="logo" />
 
 function Paragraph() {
-  return <p>Weee</p>
+  return <p>Acá abajo hay una lista</p>
+}
+
+// Sección 5
+class EjemploLista extends Component {
+  render () {
+    return <ul>
+      {cars.map( car =>
+        <CarItem key={car.id} car={car}/>
+      )}
+    </ul>
+  }
+}
+
+class CarItem extends Component {
+  render() {
+    const {model, brand} = this.props.car
+    return <li>
+            <p><strong>Modelo: </strong>{model}</p>
+            <p><strong>Marca: </strong>{brand}</p>
+          </li>
+  }
 }
 
 export default App;
