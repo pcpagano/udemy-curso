@@ -2,6 +2,7 @@ import React,{Component} from 'react';
 import logo from './logo.svg';
 import './App.css';
 import cars from './data/cars.json';
+import FormControlado from './Forms';
 
 function App() {
   return (
@@ -18,8 +19,9 @@ function App() {
 class CodeExamples extends Component {
   constructor() {
     super()
-    this.state = {toggleExamplesSeccion14: true,
-                  toggleExamplesSeccionList: true,
+    this.state = {toggleExamplesSeccion14: false,
+                  toggleExamplesSeccionList: false,
+                  toggleExamplesSectionEvents: false,
                   mouseX: 0, mouseY: 0}
   }
 
@@ -29,13 +31,13 @@ class CodeExamples extends Component {
         <button onClick={this.toggleExamples14}>Toggle Seccion 1 a 4</button>
         {this.getExamplesSeccion14()}
         <div>
-        <button onClick={() => this.toggleExamplesList()}>Toggle list section</button>
-        {this.getExamplesListSeccion()}
+          <button onClick={() => this.toggleExamplesList()}>Toggle list section</button>
+          {this.getExamplesListSeccion()}
         </div>
-        <div
-          onMouseMove={this.handleMouseMove}
-          style={{border: '1px solid #000', marginTop: 20, padding: 10 }}>
-            <p>Mouse Position: {this.state.mouseX}, {this.state.mouseY}</p>
+        <button onClick={() => this.toggleEventExamples()}>Toggle event section</button>
+        {this.getExamplesSeccionEvent()}
+        <div>
+          {this.getExamplesSeccion6()}
         </div>
       </div>
     )
@@ -76,6 +78,26 @@ class CodeExamples extends Component {
       }
   }
 
+  getExamplesSeccionEvent() {
+    if (this.state.toggleExamplesSectionEvents) {
+      return (
+        <div
+          onMouseMove={this.handleMouseMove}
+          style={{border: '1px solid #000', marginTop: 20, padding: 10 }}>
+            <p>Mouse Position: {this.state.mouseX}, {this.state.mouseY}</p>
+        </div>
+      )
+    }
+  }
+
+  getExamplesSeccion6() {
+    return (
+        <span>
+            <FormControlado/>
+        </span>
+      )
+  }
+
 // This is the best and tidy way to link the caller component with the event handler
   toggleExamples14 = () => {
     console.log("toggle 14")
@@ -83,8 +105,13 @@ class CodeExamples extends Component {
   }
   
   toggleExamplesList() {
-    console.log("toggle 5")
+    console.log("toggle List")
     this.setState({toggleExamplesSeccionList: !this.state.toggleExamplesSeccionList})
+  }
+
+  toggleEventExamples() {
+    console.log("toggle events")
+    this.setState({toggleExamplesSectionEvents: !this.state.toggleExamplesSectionEvents})
   }
 
   handleMouseMove = (e) => {
